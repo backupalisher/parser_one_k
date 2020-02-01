@@ -181,6 +181,13 @@ def saveFile(prods, file_name):
             add_data.writerow((prod['title'], prod['href'], prod['img'], prod['desc']))
 
 
+def parsed_save(prods, file_name):
+    for prod in prods:
+        with open(f'{file_name}.csv', 'a') as file:
+            add_data = csv.writer(file, delimiter=';', lineterminator='\n')
+            add_data.writerow(prod)
+
+
 def read_csv(file_name):
     row_list = []
     with open(f'{file_name}.csv', newline='') as csvfile:
