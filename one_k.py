@@ -50,7 +50,6 @@ def get_models_links():
 
 
 def model_parser(brand_name):
-
     try:
         print(brand_name)
         models_list = parser.read_csv(os.path.join(os.path.dirname(__file__), 'brands', brand_name))
@@ -61,10 +60,10 @@ def model_parser(brand_name):
             print(model[0].strip())
             proxy = {'http': 'http://' + get_my_proxy.get_proxies_list()}
             useragent = {'User-Agent': get_my_proxy.get_useregent_list()}
-            # parser.save_model_options(
-            #     parser.parser_model(parser.get_html(model[1], useragent, proxy), brand_name, model[0]),
-            #     brand_name, model[0]
-            # )
+            parser.save_model_options(
+                parser.parser_model(parser.get_html(model[1], useragent, proxy), brand_name, model[0]),
+                brand_name, model[0]
+            )
             parsed_model = []
             parsed_model.append({
                 model[0]
@@ -76,7 +75,7 @@ def model_parser(brand_name):
 
 
 def main():
-    model_parser('mb')
+    model_parser('hp')
 
 
 if __name__ == '__main__':
