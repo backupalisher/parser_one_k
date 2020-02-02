@@ -60,7 +60,7 @@ def parser_model(html, brand_name, model_name):
 
     model_options.append({
         'title': 'Model',
-        'value': stripeText(model_name)
+        'value': stripeText(model_name.strip())
     })
 
     try:
@@ -160,7 +160,7 @@ def spaseSub(text):
 def save_model_options(data, brand_name, file_name):
     if not os.path.exists(brand_name):
         os.mkdir(brand_name)
-    with open(os.path.join(brand_name, f'{stripeText(file_name, True)}.csv'), 'a') as file:
+    with open(os.path.join(brand_name, f'{stripeText(file_name, True)}.csv'), 'w') as file:
         add_data = csv.writer(file, delimiter=';', lineterminator='\n')
         for d in data:
             add_data.writerow((d['title'], d['value']))
