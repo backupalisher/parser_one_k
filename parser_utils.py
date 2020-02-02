@@ -8,9 +8,9 @@ from bs4 import BeautifulSoup as bs
 
 
 def get_html(url, useragent=None, proxy=None):
-    # session = requests.Session()
-    # request = session.get(url=url, headers=useragent, proxies=proxy)
-    request = requests.get(url=url, headers=useragent, proxies=proxy)
+    session = requests.Session()
+    request = session.get(url=url, headers=useragent, proxies=proxy)
+    # request = requests.get(url=url, headers=useragent, proxies=proxy)
     if request.status_code == 200:
         return request.text
     else:
@@ -60,7 +60,7 @@ def parser_model(html, brand_name, model_name):
 
     model_options.append({
         'title': 'Model',
-        'value': stripeText(model_name),
+        'value': stripeText(model_name)
     })
 
     try:
@@ -120,16 +120,13 @@ def parser_model(html, brand_name, model_name):
                         })
 
             if spec_unit_title_text == 'Фото':
-                try:
-                    # Сохраняем картинку из заголовка
-                    big_img = soup.find('img', attrs={'class': 'spec-about__img'})['src']
-                    img_file_name = save_img(big_img, brand_name + '_image', model_name)
-                    model_options.append({
-                        'title': 'main_image',
-                        'value': img_file_name
-                    })
-                except:
-                    pass
+                # Сохраняем картинку из заголовка
+                big_img = soup.find('img', attrs={'class': 'spec-about__img'})['src']
+                img_file_name = save_img(big_img, brand_name + '_image', model_name)
+                model_options.append({
+                    'title': 'main_image',
+                    'value': img_file_name
+                })
 
                 # Сохраняем дополнительные картинки из опций модели
                 img_link_list = soup.find_all('span', class_='spec-images__it')
@@ -141,8 +138,8 @@ def parser_model(html, brand_name, model_name):
                         'value': img_file_name
                     })
     except:
-        pass
-
+        print('Error...')
+        raise SystemExit
     return model_options
 
 
@@ -163,10 +160,6 @@ def spaseSub(text):
 def save_model_options(data, brand_name, file_name):
     if not os.path.exists(brand_name):
         os.mkdir(brand_name)
-    # file_name = spaseSub(model_name) + '__' + timestamp + '.jpg'
-    # with open(os.path.join(os.path.dirname(__file__), brand_name, file_name),
-    #           'wb') as f:
-
     with open(os.path.join(brand_name, f'{stripeText(file_name, True)}.csv'), 'a') as file:
         add_data = csv.writer(file, delimiter=';', lineterminator='\n')
         for d in data:

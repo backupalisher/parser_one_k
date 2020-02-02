@@ -55,7 +55,7 @@ def model_parser(brand_name):
         models_list = parser.read_csv(os.path.join(os.path.dirname(__file__), 'brands', brand_name))
         for model in models_list:
             # 0 - title, 1 - url, 2 - desc
-            t = uniform(3, 16)
+            t = uniform(5, 20)
             sleep(t)
             print(model[0].strip())
             proxy = {'http': 'http://' + get_my_proxy.get_proxies_list()}
