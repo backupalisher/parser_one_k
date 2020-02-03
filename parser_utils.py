@@ -88,7 +88,7 @@ def parser_model(html, brand_name, model_name):
                 if 'spec-list--sub' in spec_unit_title['class']:
                     model_options.append({
                         'title': 'SubCaption',
-                        'value': spec_unit_title.find('caption').text
+                        'value': spec_unit_title.find('caption').text.strip()
                     })
                     for row in spec_unit_title.select('tbody tr'):
                         row_text = [x.text for x in row.find_all('span', class_='spec-list__txt')]
@@ -99,12 +99,12 @@ def parser_model(html, brand_name, model_name):
 
                         if spect_list_text:
                             model_options.append({
-                                'title': spect_list_text,
-                                'value': spect_list_val
+                                'title': spect_list_text.strip(),
+                                'value': spect_list_val.strip()
                             })
                     model_options.append({
                         'title': 'EndSubCaption',
-                        'value': spec_unit_title.find('caption').text
+                        'value': spec_unit_title.find('caption').text.strip()
                     })
                 else:
                     for row in spec_unit_title.select('tbody tr'):
@@ -115,8 +115,8 @@ def parser_model(html, brand_name, model_name):
                         spect_list_val = ', '.join(row_val)
 
                         model_options.append({
-                            'title': spect_list_text,
-                            'value': spect_list_val
+                            'title': spect_list_text.strip(),
+                            'value': spect_list_val.strip()
                         })
 
             if spec_unit_title_text == 'Фото':

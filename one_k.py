@@ -55,7 +55,7 @@ def model_parser(brand_name):
         models_list = parser.read_csv(os.path.join(os.path.dirname(__file__), 'brands', brand_name))
         for model in models_list:
             # 0 - title, 1 - url, 2 - desc
-            t = uniform(8, 21)
+            t = uniform(10, 21)
             sleep(t)
             proxy = {'http': 'http://' + get_my_proxy.get_proxies_list()}
             useragent = {'User-Agent': get_my_proxy.get_useregent_list()}
@@ -73,12 +73,11 @@ def model_parser(brand_name):
                 })
                 parser.parsed_save(parsed_model, brand_name + '_parsed')
     except:
-        print('File not found!')
+        print('Ошибка получения данных')
 
 
 def main():
-    model_parser('epson')
-
+    model_parser('hp')
 
 if __name__ == '__main__':
     main()
