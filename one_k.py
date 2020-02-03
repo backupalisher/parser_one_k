@@ -55,12 +55,12 @@ def model_parser(brand_name):
         models_list = parser.read_csv(os.path.join(os.path.dirname(__file__), 'brands', brand_name))
         for model in models_list:
             # 0 - title, 1 - url, 2 - desc
-            t = uniform(10, 21)
+            t = uniform(10, 25)
             sleep(t)
             proxy = {'http': 'http://' + get_my_proxy.get_proxies_list()}
             useragent = {'User-Agent': get_my_proxy.get_useregent_list()}
             data = parser.parser_model(parser.get_html(model[1], useragent, proxy), brand_name, model[0])
-            if data:
+            if len(data) > 3:
                 print(model[0].strip())
                 parser.save_model_options(
                     data,
@@ -72,12 +72,15 @@ def model_parser(brand_name):
                     model[0].strip()
                 })
                 parser.parsed_save(parsed_model, brand_name + '_parsed')
+            else:
+                print('Пустрое значение ((')
+                raise SystemExit
     except:
         print('Ошибка получения данных')
 
 
 def main():
-    model_parser('hp')
+    model_parser('konica')
 
 if __name__ == '__main__':
     main()

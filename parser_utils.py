@@ -58,25 +58,10 @@ def parser_model(html, brand_name, model_name):
     soup = bs(html, 'lxml')
     model_options = []
 
-    model_options.append({
-        'title': 'Model',
-        'value': stripeText(model_name.strip())
-    })
-
-    try:
-        model = soup.find('b', class_='c-red').text
-        status = 'Снят с производства'
-    except:
-        status = 'Актуальный'
-
-    model_options.append({
-        'title': 'Status',
-        'value': status
-    })
-
     # Разбираем характеристики устройства
     try:
         spec_units = soup.find_all('div', class_='spec-unit')
+
         for spec_unit in spec_units:
             spec_unit_title_text = spec_unit.find('span', class_='spec-unit__ttl').text.strip()
             model_options.append({
@@ -84,7 +69,7 @@ def parser_model(html, brand_name, model_name):
                 'value': spec_unit_title_text
             })
             spec_unit_titles = spec_unit.find_all('div', class_='spec-list')
-            for spec_unit_title in spec_unit_titles:
+            for spec_unit_title in spec_unit_titles:                
                 if 'spec-list--sub' in spec_unit_title['class']:
                     model_options.append({
                         'title': 'SubCaption',
@@ -121,25 +106,50 @@ def parser_model(html, brand_name, model_name):
 
             if spec_unit_title_text == 'Фото':
                 # Сохраняем картинку из заголовка
-                big_img = soup.find('img', attrs={'class': 'spec-about__img'})['src']
-                img_file_name = save_img(big_img, brand_name + '_image', model_name)
-                model_options.append({
-                    'title': 'main_image',
-                    'value': img_file_name
-                })
-
-                # Сохраняем дополнительные картинки из опций модели
-                img_link_list = soup.find_all('span', class_='spec-images__it')
-                for img_link in img_link_list:
-                    img = img_link.find('img')['src']
-                    img_file_name = save_img(img, brand_name + '_image', model_name)
+                try:
+                    big_img = soup.find('img', attrs={'class': 'spec-about__img'})['src']
+                    img_file_name = save_img(big_img, brand_name + '_image', stripeText(model_name))
                     model_options.append({
-                        'title': 'image',
+                        'title': 'main_image',
                         'value': img_file_name
                     })
+                except:
+                    print('Ошибка сохранения главной картинки')
+
+                # Сохраняем дополнительные картинки из опций модели
+                try:
+                    img_link_list = soup.find_all('span', class_='spec-images__it')
+                    for img_link in img_link_list:
+
+                        img = img_link.find('img')['src']
+
+                        img_file_name = save_img(img, brand_name + '_image', stripeText(model_name))
+                        model_options.append({
+                            'title': 'image',
+                            'value': img_file_name
+                        })
+                except:
+                    print('Ошибка сохранения картинки')
+        model_options.append({
+            'title': 'Model',
+            'value': stripeText(model_name.strip())
+        })
+
+        try:
+            model = soup.find('b', class_='c-red').text
+            status = 'Снят с производства'
+        except:
+            status = 'Актуальный'
+
+        model_options.append({
+            'title': 'Status',
+            'value': status
+        })
     except:
         print('Error...')
         raise SystemExit
+
+    
     return model_options
 
 
